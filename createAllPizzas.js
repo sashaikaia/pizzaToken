@@ -32,50 +32,51 @@ const allCheeses = ["parmesan", "cheddar", "mozzarella", "ricotta", "romano","pr
 //toppings, 0-7
 const allToppings = ["pepperoni", "sausage", "ham", "garlic", "onion", "basil", "pepper"];
 //crusts 1
-const allCrusts = ["thin", "thick", "whole wheat", "gluten-free"]
+const crusts = ["thin", "thick", "whole wheat", "gluten-free"]
 
 const sauce = [true, false]
+
+let permCheeses = []
+for(let i = 1; i<=3;i++){
+    let cheeseObj={};
+    permCheeses.push(...allCheeses.permutation(i))
+}
+//toppings
+let permToppings = []
+for(let i = 0; i<=7;i++){
+  permToppings.push(...allToppings.permutation(i))
+}
 
 //output array
 const output = []
 
 class Pizza {
-  constructor(cheeses, sauce, toppings, crust, name) {
-    this.cheeses = cheeses;
-    this.sauce = sauce;
-    this.toppings = toppings;
-    this.crust = crust;
-    this.name = name;
+  constructor(pizza) {
+    this.pizza.cheeses = cheeses;
+    this.pizza.sauce = sauce;
+    this.pizza.toppings = toppings;
+    this.pizza.crust = crust;
   }
 }
 
 
 function makeAllPizzas(){
-  //get all permutations of cheeses
-  // console.log(allCheeses)
-  let permCheeses = []
-  for(let i = 1; i<=3;i++){
-    permCheeses.push(...allCheeses.permutation(i))
-  }
-  //toppings
-  let permToppings = []
-  for(let i = 0; i<=7;i++){
-    permToppings.push(...allToppings.permutation(i))
-  }
-
-  //multiply above together -> array of all possible 'topCombos'
-  let topCombos = []
-  //permCheeses.forEach((cheese) => permToppings.forEach((top) => topCombos.push(...[cheese.push(...top)])))
+  let allPizzas = [];
   for(let cheese of permCheeses){
-    for(let top of permToppings){
-      topCombos.push(cheese.concat(top))
+    let thisPizza={};
+    thisPizza.cheese = cheese;
+    for(let topping of permToppings){
+      thisPizza.topping = topping
+      for(let crust of crusts){
+        thisPizza.crust = crust
+        for(let sauceBool of sauce){
+          thisPizza.sauce = sauceBool
+        }
+      }
     }
+    allPizzas.push(thisPizza)
   }
-  console.log(topCombos)
-  //1 topCombos forEach crust -> toBeSauced
-
-  //1 w/ sauce, 1 w/o -> readyForTheOven(output)
-
+console.log(allPizzas)
 }
 
 makeAllPizzas();
