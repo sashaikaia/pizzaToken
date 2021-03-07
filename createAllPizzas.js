@@ -26,9 +26,23 @@
     return perm;
   };
 })();
+function cartesian(...args) {
+    var r = [], max = args.length-1;
+    function helper(arr, i) {
+        for (var j=0, l=args[i].length; j<l; j++) {
+            var a = arr.slice(0); // clone arr
+            a.push(args[i][j]);
+            if (i==max)
+                r.push(a);
+            else
+                helper(a, i+1);
+        }
+    }
+    helper([], 0);
+    return r;
+}
 //1-3
-const cheeseKey = {a: "parmesan", b: "cheddar", c: "mozzarella", d:"ricotta", e:"romano", f: "provolone", g: "jack"}
-const allCheeses = ["parmesan", "cheddar", "mozzarella", "ricotta", "romano","provolone","jack"]
+const allCheeses = ["parmesan", "cheddar", "mozzarella", "ricotta"]
 //toppings, 0-7
 const allToppings = ["pepperoni", "sausage", "ham", "garlic", "onion", "basil", "pepper"];
 //crusts 1
@@ -51,32 +65,23 @@ for(let i = 0; i<=7;i++){
 const output = []
 
 class Pizza {
-  constructor(pizza) {
-    this.pizza.cheeses = cheeses;
-    this.pizza.sauce = sauce;
-    this.pizza.toppings = toppings;
-    this.pizza.crust = crust;
+  constructor([cheese, topping, crust, sauce]) {
+    this.crust = crust;
+    this.sauce = sauce;
+    this.cheese = cheese;
+    this.toppings = topping;
   }
 }
 
 
 function makeAllPizzas(){
-  let allPizzas = [];
-  for(let cheese of permCheeses){
-    let thisPizza={};
-    thisPizza.cheese = cheese;
-    for(let topping of permToppings){
-      thisPizza.topping = topping
-      for(let crust of crusts){
-        thisPizza.crust = crust
-        for(let sauceBool of sauce){
-          thisPizza.sauce = sauceBool
-        }
-      }
-    }
-    allPizzas.push(thisPizza)
+  let bakedPizzas = []; 
+  for (let pizza of readyToBake){
+    let newPizza = new Pizza(pizza)
+    bakedPizzas.push(newPizza)
   }
-console.log(allPizzas)
+  console.log(bakedPizzas)
 }
 
-makeAllPizzas();
+let readyToBake = cartesian(permCheeses, permToppings, crusts, sauce)
+makeAllPizzas()
